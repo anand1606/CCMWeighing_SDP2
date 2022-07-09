@@ -1,0 +1,45 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Name="ConfigWindow" x:Class="uct_Weight_wpf.Config"
+        Title="Configuration" Height="154.357" Width="525.311" ResizeMode="NoResize">
+    <Grid x:Name="MainGrid" Margin="2">
+        <Grid.Effect>
+            <DropShadowEffect/>
+        </Grid.Effect>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="27"/>
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="23"/>
+
+
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFDEDCDC" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Button x:Name="btnSave" Content="Save" Grid.Column="2" HorizontalAlignment="Center" Height="24" Margin="1,1,1,1" Grid.Row="3" VerticalAlignment="Center" Width="83" Click="btnSave_Click" Background="#FFE08181"/>
+        <TextBox x:Name="txtIP" MaxLength="15" Grid.Column="1" Margin="0,0,0,0" Grid.Row="1" Grid.RowSpan="1" TextWrapping="Wrap" 
+			FontSize="14" Background="White" Grid.ColumnSpan="2"
+            Text="" />
+        <dxe:SpinEdit x:Name="txtPort" FontSize="14" VerticalAlignment="Stretch" Grid.Column="3"  Grid.Row="1" 
+			Text="" Margin="5,3,0,0"/>
+        <TextBlock x:Name="lbl_CurrentIP" FontSize="14" TextAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,2,0,2"  Grid.ColumnSpan="2"  Text="Controller IP"/>
+        <TextBlock x:Name="lbl_CurrentPort" FontSize="14" TextAlignment="Center" Grid.Row="0" Grid.Column="3" Margin="0,2,0,2"  Grid.ColumnSpan="1"  Text="Port"/>
+        <TextBlock x:Name="lbl_CurrentMachine" FontSize="14" TextAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="0,2,0,2"  Grid.ColumnSpan="1"  Text=""/>
+
+
+
+    </Grid>
+</Window>
