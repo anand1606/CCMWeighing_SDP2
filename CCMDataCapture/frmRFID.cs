@@ -566,7 +566,7 @@ namespace CCMDataCapture
                         string empcode = dr["OperatorCode"].ToString().Trim();
                         string rfid = dr["RFIDNO"].ToString().Trim();
                         machine.Register(empcode, rfid, out err);
-                        MessageBox.Show(err, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //MessageBox.Show(err, "Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     machine.DisConnect(out err);
                 }

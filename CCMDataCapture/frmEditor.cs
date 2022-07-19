@@ -111,7 +111,7 @@ namespace CCMDataCapture
             sql =
                 "Select SrNo, Convert(varchar(10),LogDateTime,121) as LogDate,Convert(varchar(5),Convert(time(5),LogDateTime)) as LogTime, " +
                 " MachineNo,tShift,IntSrNo,PipeNumber,PipeDia,PipeClass,PipeLength,ActWt,NomWt,Material,Standard,JointType,MouldNo,PipeStatus,MinWt,MaxWt,AlmMinWt,AlmMaxWt, " +
-                " ABS((Case When(NomWt <= 0) then 0 else Round(((NomWt - ActWt) / NomWt * 100), 3) end)) as DevPer,Remarks, OperatorCode,OperatorName " +
+                " (Case When(NomWt <= 0) then 0 else Round(((NomWt - ActWt) / NomWt * 100), 3) end) as DevPer,Remarks, OperatorCode,OperatorName " +
                 " From [" + tablename + "] " +
                 " where tDate='" + txtDate.DateTime.Date.ToString("yyyy-MM-dd") + "' and tShift ='" + txtShift.Text.Trim().ToString() + "'";
 
@@ -302,6 +302,11 @@ namespace CCMDataCapture
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            DialogResult dr = MessageBox.Show("Are You Sure to Cancel your changes?","Question", MessageBoxButtons.YesNoCancel);
+
+            if (dr != DialogResult.Yes)
+                return;
+
             grd_report.DataSource = null;
             ResetCtrl();
             UnlockCtrl();
@@ -314,6 +319,11 @@ namespace CCMDataCapture
                 MessageBox.Show("Please Select required parameters..", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            DialogResult dr = MessageBox.Show("Are You Sure to Save Changes?", "Question", MessageBoxButtons.YesNoCancel);
+
+            if (dr != DialogResult.Yes)
+                return;
 
             this.Cursor = Cursors.WaitCursor;
 
