@@ -795,11 +795,8 @@ namespace uct_Weight_wpf
                     //LastMaterial varchar(50)
                     //LastStandard varchar(50)
                     //UpdDt datetime
-
-                    string err;
-                    string tmpname = GetDescription("Select OperatorName from ccmRFIDOperator where [OperatorCode] = '" + CurrentOperator + "'", curSQLConStr, out err);
-
-                    cn.Open();
+                     
+                     cn.Open();
                      using (SqlCommand cmd = new SqlCommand())
                      {
                          string sql = "Insert into ccmLastPara (MachineID,LastSize,LastLength,LastClass,LastMinWt,LastMaxWt,LastNomWt," + 
@@ -818,8 +815,7 @@ namespace uct_Weight_wpf
                              "'" + CurrentMaterial.ToString() + "'," +
                              "'" + CurrentStandard.ToString() + "'," +
                              "'" + CurrentOperator.ToString() + "'," +
-                          //   "'" + CurrentOperatorName.ToString() + "'," +
-                             "'" + tmpname + "'," +
+                             "'" + CurrentOperatorName.ToString() + "'," +
                              "'" + CurrentPunch.ToString() + "',GetDate())";
                          cmd.Connection = cn;
                          cmd.CommandType = CommandType.Text;

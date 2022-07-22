@@ -21,7 +21,7 @@ namespace ccmModBus
         private static Boolean ShutdownSignal = false;
         private static System.Timers.Timer timer = new System.Timers.Timer();
         private static ModbusTcpServer modserver = new ModbusTcpServer();
-
+        private static int Counter = 0;
         private static Dictionary<string, int> map = new Dictionary<string, int>();
         //private static Random random = new Random();
         //private static ModbusTcpClient modclient = new ModbusTcpClient();
@@ -168,16 +168,25 @@ namespace ccmModBus
             hasRows = ds.Tables.Cast<DataTable>().Any(table => table.Rows.Count != 0);
             if (hasRows)
             {
-                //Library.WriteInfoLog("Modbus Service->Record Founds");
+                Library.WriteInfoLog("Modbus Service->Record Founds");
                 foreach (DataRow row in ds.Tables[0].Rows)
                 {
                    
                     int regadd = 0;
-                    map.TryGetValue(row["MachineNo"].ToString(), out regadd);
-                    if (regadd != 0)
+                    foreach (KeyValuePair<string, int> keyValue in map)
+                    {
+                        if(keyValue.Key == row["MachineNo"].ToString())
+                        {
+                            regadd = keyValue.Value;
+                            break;
+                        }
+                    }
+
+                    if (regadd > 0)
                     {
                         //Library.WriteInfoLog("Modbus Service->writing register->" + regadd.ToString() + "->" + row["ID"].ToString());
-                        int regval = Convert.ToInt16(row["ID"].ToString());
+                        //int regval = Convert.ToInt16(row["ID"].ToString());
+                        int regval = 1;
 
                         Library.WriteInfoLog("Modbus Service->writing register->" + regadd.ToString() + "-Value->" + regval.ToString() );
                         //----- auto normal performance version, more flexibility

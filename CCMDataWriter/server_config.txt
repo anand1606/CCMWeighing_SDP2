@@ -1,1 +1,1 @@
-﻿amqp://admin:admin123@172.16.12.44:5672/CCM
+﻿amqp://guest:guest@localhost:5672/CCM

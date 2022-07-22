@@ -899,8 +899,7 @@ namespace CCMDataWriter
 
                     if (t.Parameters.AlmMaxWt > 0 && t.ActWt >= Convert.ToDouble(t.Parameters.AlmMaxWt))
                         tPipeStatus = "OVER_WT_ALM";
-
-                   
+                    
 
                     // LogDateTime,SrNo,PipeNumber,PipeClass,PipeLength,PipeDia,JointType,MouldNo,ActWt,MinWt,MaxWt,NomWt
                     string sql1 = "Insert into [" + curTableNm + "]  (tDate,tShift,SrNo,LogDateTime,IntSrNo,MachineNo,PipeNumber,PipeClass,PipeLength,PipeDia," +
@@ -1015,8 +1014,6 @@ namespace CCMDataWriter
                     //Library.WriteInfoLog("MaxWt->" + dr["LastMaxWt"].ToString());
                     //Library.WriteInfoLog("MinWt->" + dr["LastMinWt"].ToString());
                     //Library.WriteInfoLog("Class->" + dr["LastClass"].ToString());
-
-                   
 
                     tCurSetting.Size = dr["LastSize"].ToString();
                     tCurSetting.Class = dr["LastClass"].ToString();

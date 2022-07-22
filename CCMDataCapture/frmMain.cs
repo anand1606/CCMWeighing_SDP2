@@ -176,6 +176,7 @@ namespace CCMDataCapture
                     cmb_10.Items.Add(dr["MachineName"].ToString());
                     cmb_Report_Machines.Items.Add(dr["MachineName"].ToString());
                 }
+                cmb_Report_Machines.Items.Add("ALL");
             }
 
 
@@ -192,7 +193,7 @@ namespace CCMDataCapture
 
 
             xtraTabCCM1.Text = "CCM-PP";
-            t1 = weightCanwas1.model.Connect(RBMQServer, SQLConStr, strlstLength, strlstClass, strlstdia,strlstMaterial,strlstStandard, "PP", "", "",true);
+            t1 = weightCanwas1.model.Connect(RBMQServer, SQLConStr, strlstLength, strlstClass, strlstdia, strlstMaterial, strlstStandard, "PP", "", "", true);
             Thread.Sleep(100);
 
             xtraTabCCM2.Text = "CCM-QQ";
@@ -475,60 +476,109 @@ namespace CCMDataCapture
                 MessageBox.Show("Please Select Report Options...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            string tMachine = cmb_Report_Machines.Text.ToString().Trim();
             string tOption = cmb_Options.Text.ToString().Trim();
+            string tMachine = cmb_Report_Machines.Text.ToString().Trim();
             string tTableName = GetTableName(tMachine);
-            string sql =
-                "Select Convert(varchar(10),C.tDate,121) as [Date],C.tShift as [Shift],SrNo, IntSrNo as [SizeSrNo], Convert(varchar(8),Convert(time(5),LogDateTime)) as [Time]," +
-                " MachineNo,PipeDia,PipeClass,PipeLength,PipeNumber,JointType,MouldNo,MinWt,MaxWt,ActWt,NomWt, " +
-                " (case when (ActWt <= NomWt) then (ActWt-NomWt) else (NomWt-ActWt) end) as DevKG , " +
-                " (Case When (NomWt <= 0 ) then 0 else Round(((NomWt-ActWt)/NomWt*100),3) end) as DevPer,Remarks,info.InchargeName, PipeStatus,Material,Standard, OperatorCode,OperatorName  " +
-                " From [" + tTableName + "] C left outer join ccmShiftWiseInfo info on c.tDate = info.tDate and c.tShift = info.tShift ";
+           
+            string sql = "";
+            if (tMachine == "ALL")
+            {
+                sql = "Select [Date],[Shift],SrNo, [SizeSrNo], [Time], MachineNo,PipeDia,PipeClass,PipeLength,PipeNumber,JointType,MouldNo,MinWt,MaxWt,ActWt,NomWt,  DevKG ," + 
+                    " DevPer,Remarks,InchargeName, PipeStatus,Material,[Standard], OperatorCode,OperatorName  from  V_ALL_Machine_Report ";
+
+
+                if (!tOption.Contains("Timing") && !string.IsNullOrEmpty(tOption))
+                {
+                    if (txtDate.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select Date...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                if (tOption == "Shift-A")
+                {
+                    sql += " Where [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'A' Order By LogDateTime";
+                }
+                else if (tOption == "Shift-B")
+                {
+                    sql += " Where [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'B' Order By LogDateTime";
+                }
+                else if (tOption == "Shift-C")
+                {
+                    sql += " Where [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'C' Order By LogDateTime";
+                }
+                else if (tOption == "ALL")
+                {
+                    sql += " Where [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' Order by LogDateTime ";
+                }
+                else if (tOption == "Timing")
+                {
+                    if (txtFromDt.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select From DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (txtToDt.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select To DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    sql += " Where LogDateTime between '" + txtFromDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' and '" + txtToDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' Order by LogDateTime ";
+
+                }
+            }
+            else
+            {
+                sql = "Select [Date],[Shift],SrNo, [SizeSrNo], [Time], MachineNo,PipeDia,PipeClass,PipeLength,PipeNumber,JointType,MouldNo,MinWt,MaxWt,ActWt,NomWt,  DevKG ," +
+                    " DevPer,Remarks,InchargeName, PipeStatus,Material,[Standard], OperatorCode,OperatorName  from  V_ALL_Machine_Report ";
+
+                if (!tOption.Contains("Timing") && !string.IsNullOrEmpty(tOption))
+                {
+                    if (txtDate.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select Date...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+                if (tOption == "Shift-A")
+                {
+                    sql += " Where MachineNo = '" + tMachine + "' and [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'A' Order By LogDateTime";
+                }
+                else if (tOption == "Shift-B")
+                {
+                    sql += " Where MachineNo = '" + tMachine + "' and [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'B' Order By LogDateTime";
+                }
+                else if (tOption == "Shift-C")
+                {
+                    sql += " Where MachineNo = '" + tMachine + "' and [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and [Shift] = 'C' Order By LogDateTime";
+                }
+                else if (tOption == "ALL")
+                {
+                    sql += " Where MachineNo = '" + tMachine + "' and [Date] ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' Order by LogDateTime ";
+                }
+                else if (tOption == "Timing")
+                {
+                    if (txtFromDt.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select From DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    if (txtToDt.EditValue == DBNull.Value)
+                    {
+                        MessageBox.Show("Please Select To DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    sql += " Where MachineNo = '" + tMachine + "' and LogDateTime between '" + txtFromDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' and '" + txtToDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' Order by LogDateTime ";
+
+                }
+
+            }
+
+
             
-                    
 
-            if (!tOption.Contains("Timing") && !string.IsNullOrEmpty(tOption))
-            {
-                if (txtDate.EditValue == DBNull.Value)
-                {
-                    MessageBox.Show("Please Select Date...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
-            if (tOption == "Shift-A")
-            {
-                sql += " Where C.tDate ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and C.tShift = 'A' Order By LogDateTime";
-            }
-            else if (tOption == "Shift-B")
-            {
-                sql += " Where C.tDate ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and C.tShift = 'B' Order By LogDateTime";
-            }
-            else if (tOption == "Shift-C")
-            {
-                sql += " Where C.tDate ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' and C.tShift = 'C' Order By LogDateTime";
-            }
-            else if (tOption == "ALL") 
-            {
-                sql += " Where C.tDate ='" + txtDate.DateTime.ToString("yyyy-MM-dd") + "' Order by LogDateTime ";
-            }
-            else if (tOption == "Timing")
-            {
-                if (txtFromDt.EditValue == DBNull.Value)
-                {
-                    MessageBox.Show("Please Select From DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                if (txtToDt.EditValue == DBNull.Value)
-                {
-                    MessageBox.Show("Please Select To DateTime...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                sql += " Where C.LogDateTime between '" + txtFromDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' and '" + txtToDt.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "' Order by LogDateTime ";
-
-            }
-            
             lblRecCount.Text = "0";
             string err;
             DataSet ds = Utility.GetData(sql, SQLConStr,out err);
@@ -845,7 +895,7 @@ namespace CCMDataCapture
             //    MessageBox.Show(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //}
 
-            dsSummaryRpt = Utility.GetData("Select * from ccmReportMaster Order by ReportID", SQLConStr,out err);
+            dsSummaryRpt = Utility.GetData("Select ReportID, (Convert(varchar(10),ReportID) + '-' + ReportName) as ReportName from ccmReportMaster Order by ReportID", SQLConStr,out err);
             if (!string.IsNullOrEmpty(err))
             {
                 MessageBox.Show(err, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

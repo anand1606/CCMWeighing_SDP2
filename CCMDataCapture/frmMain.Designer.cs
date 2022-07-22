@@ -555,7 +555,7 @@
             // 
             this.xtraTabPage2.Controls.Add(this.xtraTabWeight);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(1123, 679);
+            this.xtraTabPage2.Size = new System.Drawing.Size(1127, 682);
             this.xtraTabPage2.Text = "Parameter Settings";
             // 
             // xtraTabWeight
@@ -570,7 +570,7 @@
             this.xtraTabWeight.Location = new System.Drawing.Point(0, 0);
             this.xtraTabWeight.Name = "xtraTabWeight";
             this.xtraTabWeight.SelectedTabPage = this.xtraTabCCM1;
-            this.xtraTabWeight.Size = new System.Drawing.Size(1123, 679);
+            this.xtraTabWeight.Size = new System.Drawing.Size(1127, 682);
             this.xtraTabWeight.TabIndex = 0;
             this.xtraTabWeight.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabCCM1,
@@ -584,7 +584,7 @@
             // 
             this.xtraTabCCM1.Controls.Add(this.elm_wt_1);
             this.xtraTabCCM1.Name = "xtraTabCCM1";
-            this.xtraTabCCM1.Size = new System.Drawing.Size(1117, 646);
+            this.xtraTabCCM1.Size = new System.Drawing.Size(1121, 649);
             this.xtraTabCCM1.Text = "CCM-1";
             // 
             // elm_wt_1
